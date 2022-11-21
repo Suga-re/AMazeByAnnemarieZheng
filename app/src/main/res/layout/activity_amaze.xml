@@ -78,6 +78,7 @@
 
     <Spinner
         android:id="@+id/spinnerMazeGeneration"
+        android:text="DFS"
         android:layout_width="200dp"
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"

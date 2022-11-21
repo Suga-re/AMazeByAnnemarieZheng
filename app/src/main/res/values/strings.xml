@@ -5,4 +5,11 @@
         <item>Prim</item>
         <item>Boruvka</item>
     </string-array>
+
+    <string-array name="robotConfig">
+        <item>Premium</item>
+        <item>Mediocre</item>
+        <item>So-So</item>
+        <item>Shaky</item>
+    </string-array>
 </resources>
