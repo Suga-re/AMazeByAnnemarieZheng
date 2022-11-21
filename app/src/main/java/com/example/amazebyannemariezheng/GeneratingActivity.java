@@ -18,26 +18,30 @@ import java.util.TimerTask;
 
 public class GeneratingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private ProgressBar mazeProgress;
-
     private Spinner robotConfig;
     private TextView tvMazePercentage;
     int counter=0;
     Handler handler= new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generating);
+
+        //initialize variable values
         robotConfig=(Spinner)findViewById(R.id.spinnerRobotConfig);
         tvMazePercentage=(TextView) findViewById(R.id.tvMazeProgress);
         mazeProgress=(ProgressBar) findViewById(R.id.progressBarMaze);
 
 
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.mazeGeneration,android.R.layout.simple_spinner_item);
+        //robot values set and given to spinner to display
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.robotConfig,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         robotConfig.setAdapter(adapter);
         robotConfig.setOnItemSelectedListener(this);
 
+
+        //thread that generates maze in background and updates UI to show progress
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -65,24 +69,7 @@ public class GeneratingActivity extends AppCompatActivity implements AdapterView
 
         }
     }
-//    public void prog()
-//    {
-//
-//        mazeProgress=(ProgressBar)findViewById(R.id.progressBarMaze);
-//        Timer t= new Timer();
-//        TimerTask tt= new TimerTask() {
-//            @Override
-//            public void run() {
-//                counter++;
-//                mazeProgress.setProgress(counter);
-//
-//                if(counter==100){
-//                    t.cancel();
-//                }
-//            }
-//        };
-//        t.schedule(tt,0,100);
-//    }
+
     @Override
     public void onBackPressed(){
         Intent intent = new Intent(this, AMazeActivity.class);

@@ -29,7 +29,7 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amaze);
 
-    //set variables with item by id
+        //set variable values
         skillLevel=(SeekBar)findViewById(R.id.seekBarSkillLevel);
         tvSkill=(TextView)findViewById(R.id.tvSkillLevel);
         toggleRooms=(ToggleButton)findViewById(R.id.toggleRooms);
@@ -39,6 +39,7 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
         revisit=(Button) findViewById(R.id.btnRevisit);
         explore=(Button) findViewById(R.id.btnExplore);
 
+        //updates skill level text based on the seekbar progress
         skillLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -56,6 +57,8 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
 
             }
         });
+
+        //redirect buttons clicked to move to generating activity
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,16 +78,23 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
                 openActivity();
             }
         });
+
+        //maze generation values set and given to spinner to display
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.mazeGeneration,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mazeGeneration.setAdapter(adapter);
         mazeGeneration.setOnItemSelectedListener(this);
 
     }
+    // extra (overridden) functions
+
+    //opens GeneratingActivity page
     public void openActivity() {
         Intent intent = new Intent(this, GeneratingActivity.class);
         startActivity(intent);
     };
+
+    //creates a toast popup based on item selected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
         String text = parent.getItemAtPosition(pos).toString();
