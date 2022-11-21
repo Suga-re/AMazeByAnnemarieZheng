@@ -6,15 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".WinningActivity">
 
+
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tvCongratulations"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Winning Activity"
+        android:text="You Reached the Exit!"
         android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
+        app:layout_constraintHorizontal_bias="0.365"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.065" />
+
+    <TextView
+        android:id="@+id/tvEnergyUsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Energy Consumed : 500"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.153" />
+
+    <TextView
+        android:id="@+id/tvPathLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Path Length : 45"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.443"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.264" />
+
+    <Button
+        android:id="@+id/btnNewGame"
+        android:layout_width="128dp"
+        android:layout_height="63dp"
+        android:text="New Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
 </androidx.constraintlayout.widget.ConstraintLayout>
