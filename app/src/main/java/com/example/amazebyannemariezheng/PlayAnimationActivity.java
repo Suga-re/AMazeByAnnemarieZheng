@@ -10,10 +10,13 @@ import android.widget.Button;
 public class PlayAnimationActivity extends AppCompatActivity {
     Button win;
     Button lose;
+    MazePanel mazePanel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_animation);
+
+        mazePanel=new MazePanel(this);
 
         win=(Button) findViewById(R.id.btnWin);
         lose=(Button) findViewById(R.id.btnLose);

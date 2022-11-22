@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+
 public class AMazeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private SeekBar skillLevel;
     private TextView tvSkill;
@@ -25,10 +26,15 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
     private Button revisit;
     private Button explore;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amaze);
+
+
+
+
 
         Log.v("Play","Message here");
         //set variable values
