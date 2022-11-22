@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,7 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amaze);
 
+        Log.v("Play","Message here");
         //set variable values
         skillLevel=(SeekBar)findViewById(R.id.seekBarSkillLevel);
         tvSkill=(TextView)findViewById(R.id.tvSkillLevel);

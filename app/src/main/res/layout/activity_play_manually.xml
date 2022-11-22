@@ -7,15 +7,197 @@
     tools:context=".PlayManuallyActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvShowMapManual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Manual Screen"
-        android:textSize="30sp"
+        android:text="Show Map"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.474"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.078" />
+
+    <TextView
+        android:id="@+id/tvShowWallsManual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Walls"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.077" />
+
+    <TextView
+        android:id="@+id/tvShowSolutionManual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Solution"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.916"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.077" />
+
+    <TextView
+        android:id="@+id/tvZoomManual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ZOOM"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.471"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.211" />
+
+    <Button
+        android:id="@+id/btnZoomInManual"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="+"
+        android:textAlignment="center"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.402" />
+        app:layout_constraintVertical_bias="0.122" />
+
+    <Button
+        android:id="@+id/btnZoomOutManual"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="-"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.398"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.122" />
+
+    <Button
+        android:id="@+id/btnJump"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="JUMP"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.873" />
+
+    <Switch
+        android:id="@+id/switchWallsManual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.008" />
+
+    <Switch
+        android:id="@+id/switchMapManual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.007" />
+
+    <Switch
+        android:id="@+id/switchSolutionManual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.831"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <Button
+        android:id="@+id/btnShortcut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Short\ncut"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963" />
+
+    <ImageButton
+        android:id="@+id/imgbtnForward"
+        android:layout_width="88dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.736"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/switchMapManual"
+        app:layout_constraintVertical_bias="0.867"
+        app:srcCompat="@drawable/forwardbutton"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/imgbtnLeft"
+        android:layout_width="88dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.532"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/switchMapManual"
+        app:layout_constraintVertical_bias="0.983"
+        app:srcCompat="@drawable/leftbutton"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/imgbtnRight"
+        android:layout_width="88dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.928"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/switchMapManual"
+        app:layout_constraintVertical_bias="0.983"
+        app:srcCompat="@drawable/rightbutton"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
