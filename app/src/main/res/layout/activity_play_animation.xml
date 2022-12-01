@@ -281,9 +281,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.905" />
 
-    <View
-        android:id="@+id/mazePanelAnimation"
-        class="com.example.amazebyannemariezheng.MazePanel"
+    <com.example.amazebyannemariezheng.MazePanel
         android:layout_width="350dp"
         android:layout_height="350dp"
         app:layout_constraintBottom_toBottomOf="parent"
