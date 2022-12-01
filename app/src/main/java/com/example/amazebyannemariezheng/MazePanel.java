@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
 
 public class MazePanel extends View implements P7PanelF22{
     private Canvas canvas;
@@ -21,6 +22,10 @@ public class MazePanel extends View implements P7PanelF22{
 
     private Context context;
     private AttributeSet attr;
+
+    private static final int greenWM = Color.parseColor("#115740");
+    private static final int goldWM = Color.parseColor("#916f41");
+    private static final int blackWM = Color.parseColor("#222222");
 
 
 
@@ -105,7 +110,7 @@ public class MazePanel extends View implements P7PanelF22{
 
     @Override
     public boolean isOperational() {
-        //to do
+        //to do ask teacher
         return false;
     }
 
@@ -121,9 +126,13 @@ public class MazePanel extends View implements P7PanelF22{
 
     @Override
     public void addBackground(float percentToExit) {
-        setColor(Color.BLUE);
+
+        int blendedColor=ColorUtils.blendARGB(blackWM,goldWM,percentToExit/100);
+        setColor(blendedColor);
         addFilledRectangle(0, 0, width, height/2);
-        setColor(Color.RED);
+
+        blendedColor=ColorUtils.blendARGB(Color.GRAY,greenWM,percentToExit/100);
+        setColor(blendedColor);
         addFilledRectangle(0, height/2, width, height);
     }
 
