@@ -20,7 +20,16 @@ import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GeneratingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+import generation.DefaultOrder;
+import generation.Factory;
+import generation.Floorplan;
+import generation.Maze;
+import generation.MazeBuilder;
+import generation.MazeFactory;
+import generation.Order;
+import generation.SingleRandom;
+
+public class GeneratingActivity extends AppCompatActivity implements Order {
     private ProgressBar mazeProgress;
     private Spinner robotConfig;
     private TextView tvMazePercentage;
@@ -30,7 +39,18 @@ public class GeneratingActivity extends AppCompatActivity implements AdapterView
     int progress=0;
     Handler handler= new Handler();
 
+    private String filename;
     String driverSelected;
+
+    protected Factory factory;
+    private boolean started=false;
+    private static int skilllevel;
+    private static Builder builder;
+    private String checkAlgorithm;
+    private static boolean perfectMaze;
+    private static int seed;
+    SingleRandom random;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +64,33 @@ public class GeneratingActivity extends AppCompatActivity implements AdapterView
         driverGroup=(RadioGroup) findViewById(R.id.rgDriver);
         manualButton=(RadioButton) findViewById(R.id.rbManual);
         buttonSelected=null;
+
+        //initialize maze generation parameter values
+        Intent intent = getIntent();
+        skilllevel = intent.getIntExtra("skill level",0);
+        perfectMaze =!intent.getBooleanExtra("rooms",true);
+        checkAlgorithm= intent.getStringExtra("generation algorithm");
+
+
+        if (checkAlgorithm.equals("DFS")){
+
+            builder = Builder.DFS;
+        }
+        else if (checkAlgorithm.equals("Prim")){
+            builder= Builder.Prim;
+        }
+        else if (checkAlgorithm.equals("Boruvka")){
+            builder= Builder.Boruvka;
+        }
+        random = new SingleRandom();
+        seed = random.nextInt();
+
+        buildMaze();
+//        factory.waitTillDelivered();
+
+
+
+
 
         driverGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -70,55 +117,41 @@ public class GeneratingActivity extends AppCompatActivity implements AdapterView
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.robotConfig,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         robotConfig.setAdapter(adapter);
-        robotConfig.setOnItemSelectedListener(this);
+
+        robotConfig.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
+                String text = parent.getItemAtPosition(pos).toString();
+                Toast.makeText(parent.getContext(),text, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
         //thread that generates maze in background and updates UI to show progress
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                startProgress();
-            }
-        });
-        thread.start();
+
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                startProgress();
+//            }
+//        });
+//        thread.start();
     }
-    public void startProgress(){
-        for(progress=0; progress<100;progress++) {
-            try {
-                Thread.sleep(50);
-                mazeProgress.setProgress(progress);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    tvMazePercentage.setText("Maze Progress\n"+String.valueOf(progress)+"%");
-                    if (progress==100){
-                        if(buttonSelected==null){
-                            AlertDialog.Builder alertDialog= new AlertDialog.Builder(GeneratingActivity.this);
-                            alertDialog.setMessage("Select Driver");
-                            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            });
-                            alertDialog.show();
-                        }
-                        else{
-                            switchToPlaying(buttonSelected);
-                        }
-
-                    }
-                }
-            });
 
 
 
-        }
+
+    //Functions
+    private void buildMaze(){
+        factory = new MazeFactory();
+        factory.order(this);
     }
+
 
     private void switchToPlaying(RadioButton buttonSelected){
         Intent intent;
@@ -139,14 +172,67 @@ public class GeneratingActivity extends AppCompatActivity implements AdapterView
         startActivity(intent);
     }
 
+
+
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
-        String text = parent.getItemAtPosition(pos).toString();
-        Toast.makeText(parent.getContext(),text, Toast.LENGTH_SHORT).show();
+    public int getSkillLevel() {
+        return skilllevel;
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
+    public Builder getBuilder() {
+        return builder;
     }
+
+    @Override
+    public boolean isPerfect() {
+        return perfectMaze;
+    }
+
+    @Override
+    public int getSeed() {
+        return seed;
+    }
+
+    @Override
+    public void deliver(Maze mazeConfig) {
+        MazeHolder.getInstance().setMaze(mazeConfig);
+    }
+
+    @Override
+    public void updateProgress(int percentage) {
+        progress=percentage;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (progress==100){
+                    mazeProgress.setProgress(progress);
+                    tvMazePercentage.setText("Maze Progress\n" + String.valueOf(progress) + "%");
+
+                    if(buttonSelected==null){
+                        AlertDialog.Builder alertDialog= new AlertDialog.Builder(GeneratingActivity.this);
+                        alertDialog.setMessage("Select Driver");
+                        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                        alertDialog.show();
+                    }
+                    else{
+                        switchToPlaying(buttonSelected);
+                    }
+
+                }
+                else{
+                    mazeProgress.setProgress(progress);
+                    tvMazePercentage.setText("Maze Progress\n" + String.valueOf(progress) + "%");
+                }
+            }
+        });
+    }
+
+
+
 }

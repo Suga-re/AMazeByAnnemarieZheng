@@ -17,11 +17,16 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 
+
+
 public class AMazeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private SeekBar skillLevel;
+    private int Level=0;
     private TextView tvSkill;
     private ToggleButton toggleRooms;
+    private boolean hasRooms=true;
     private Spinner mazeGeneration;
+    private String generationAlgorithm="DFS";
     private Button start;
     private Button revisit;
     private Button explore;
@@ -52,6 +57,7 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 tvSkill.setText("Tomb Level:"+progress);
+                Level = progress;
 
             }
 
@@ -65,7 +71,12 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
 
             }
         });
-
+        toggleRooms.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                hasRooms=b;
+            }
+        });
         //redirect buttons clicked to move to generating activity
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +110,9 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
     //opens GeneratingActivity page
     public void openActivity() {
         Intent intent = new Intent(this, GeneratingActivity.class);
+        intent.putExtra("generation algorithm", generationAlgorithm);
+        intent.putExtra("skill level", Level);
+        intent.putExtra("rooms", hasRooms);
         startActivity(intent);
     };
 
@@ -106,6 +120,7 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
         String text = parent.getItemAtPosition(pos).toString();
+        generationAlgorithm = text;
         Toast.makeText(parent.getContext(),text, Toast.LENGTH_SHORT).show();
     }
 
