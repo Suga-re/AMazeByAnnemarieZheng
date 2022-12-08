@@ -49,15 +49,16 @@ public class MazePanel extends View implements P7PanelF22{
         super(context, attrs);
         this.context = context;
         this.attr=attrs;
-
+//        myTestImage(canvas);
         init(attrs);
     }
 //should not call onDraw or onMeasure
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas); //should use the canvas.drawbitMap to draw onto the canvas
-
-        myTestImage(canvas);
+    protected void onDraw(Canvas c) {
+        super.onDraw(c); //should use the canvas.drawbitMap to draw onto the canvas
+//        canvas=c;
+        c.drawBitmap(bitmap,0,0,paint);
+//        myTestImage(canvas);
 
 //        canvas.drawBitmap(bitmap,canvas.getWidth(),canvas.getHeight(), paint);
     }

@@ -5,7 +5,7 @@ import generation.Order;
 
 public class MazeHolder {
 
-	private static Maze maze;
+	private Maze maze;
 
 
 	public Maze getMaze() {return maze;}

@@ -41,6 +41,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
 
     private String filename;
     String driverSelected;
+    String robotSelected;
 
     protected Factory factory;
     private boolean started=false;
@@ -50,6 +51,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     private static boolean perfectMaze;
     private static int seed;
     SingleRandom random;
+    Maze maze=null;
 
 
     @Override
@@ -86,7 +88,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         seed = random.nextInt();
 
         buildMaze();
-//        factory.waitTillDelivered();
+
 
 
 
@@ -96,6 +98,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedDriver) {
                 buttonSelected=(RadioButton)findViewById(checkedDriver);
+                driverSelected = (String) buttonSelected.getText();
 
                 if (progress!=100){
                     AlertDialog.Builder alertDialog2= new AlertDialog.Builder(GeneratingActivity.this);
@@ -121,8 +124,8 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         robotConfig.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
-                String text = parent.getItemAtPosition(pos).toString();
-                Toast.makeText(parent.getContext(),text, Toast.LENGTH_SHORT).show();
+                robotSelected = parent.getItemAtPosition(pos).toString();
+                Toast.makeText(parent.getContext(),robotSelected, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -150,6 +153,8 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     private void buildMaze(){
         factory = new MazeFactory();
         factory.order(this);
+//        factory.waitTillDelivered();
+
     }
 
 
@@ -157,11 +162,16 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         Intent intent;
         if (buttonSelected==manualButton){
             intent = new Intent(this, PlayManuallyActivity.class);
+            transferValues(intent);
+            startActivity(intent);
         }
         else{
             intent = new Intent(this, PlayAnimationActivity.class);
+            transferValues(intent);
+            startActivity(intent);
 
         }
+
         startActivity(intent);
         //check if driver instance value is some value
         //check if maze is 100 or more
@@ -172,7 +182,14 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         startActivity(intent);
     }
 
-
+    private void transferValues(Intent intent){
+        intent.putExtra("generation algorithm", getBuilder());
+        intent.putExtra("skill level", getSkillLevel());
+        intent.putExtra("rooms", isPerfect());
+        intent.putExtra("seed", getSeed());
+        intent.putExtra("driver", driverSelected);
+        intent.putExtra("robot", robotSelected);
+    }
 
     @Override
     public int getSkillLevel() {
@@ -194,9 +211,18 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         return seed;
     }
 
+    public Maze getMaze() {
+       if (maze==null) {
+           return null;
+       }
+       else{
+               return maze;
+           }
+    }
     @Override
     public void deliver(Maze mazeConfig) {
-        MazeHolder.getInstance().setMaze(mazeConfig);
+            this.maze=mazeConfig;
+           MazeHolder.getInstance().setMaze(mazeConfig);
     }
 
     @Override
