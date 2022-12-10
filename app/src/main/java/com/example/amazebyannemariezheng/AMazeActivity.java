@@ -3,7 +3,9 @@ package com.example.amazebyannemariezheng;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-
+import generation.SingleRandom;
 
 
 public class AMazeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -27,7 +29,8 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
     private boolean hasRooms=true;
     private Spinner mazeGeneration;
     private String generationAlgorithm="DFS";
-    private Button start;
+    private static int seed;
+    SingleRandom random;
     private Button revisit;
     private Button explore;
 
@@ -37,20 +40,16 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amaze);
 
-
-
-
-
-        Log.v("Play","Message here");
         //set variable values
         skillLevel=(SeekBar)findViewById(R.id.seekBarSkillLevel);
         tvSkill=(TextView)findViewById(R.id.tvSkillLevel);
         toggleRooms=(ToggleButton)findViewById(R.id.toggleRooms);
         mazeGeneration=(Spinner)findViewById(R.id.spinnerMazeGeneration);
         toggleRooms.setText("Y");
-        start=(Button) findViewById(R.id.btnStart);
         revisit=(Button) findViewById(R.id.btnRevisit);
         explore=(Button) findViewById(R.id.btnExplore);
+        random = new SingleRandom();
+        seed = random.nextInt();
 
         //updates skill level text based on the seekbar progress
         skillLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -78,23 +77,17 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
             }
         });
         //redirect buttons clicked to move to generating activity
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openActivity();
-            }
-        });
 
         revisit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivity();
+                revisit();
             }
         });
         explore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivity();
+                explore();
             }
         });
 
@@ -108,13 +101,39 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
     // extra (overridden) functions
 
     //opens GeneratingActivity page
-    public void openActivity() {
+    public void explore() {
         Intent intent = new Intent(this, GeneratingActivity.class);
+
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("generation", generationAlgorithm);
+        editor.putInt("skill level", Level);
+        editor.putBoolean("rooms", hasRooms);
+        editor.putInt("seed", seed);
+        editor.apply();
+
         intent.putExtra("generation algorithm", generationAlgorithm);
         intent.putExtra("skill level", Level);
         intent.putExtra("rooms", hasRooms);
+        intent.putExtra("seed", seed);
         startActivity(intent);
     };
+
+    public void revisit(){
+        Intent intent = new Intent(this, GeneratingActivity.class);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        generationAlgorithm = preferences.getString("generation", generationAlgorithm);
+        Level = preferences.getInt("skill level", Level);
+        hasRooms = preferences.getBoolean("rooms", hasRooms);
+        seed= preferences.getInt("seed", seed);
+
+        intent.putExtra("generation algorithm", generationAlgorithm);
+        intent.putExtra("skill level", Level);
+        intent.putExtra("rooms", hasRooms);
+        intent.putExtra("seed", seed);
+        startActivity(intent);
+    }
 
     //creates a toast popup based on item selected
     @Override

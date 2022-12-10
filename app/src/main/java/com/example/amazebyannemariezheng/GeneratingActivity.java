@@ -50,7 +50,6 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     private String checkAlgorithm;
     private static boolean perfectMaze;
     private static int seed;
-    SingleRandom random;
     Maze maze=null;
 
 
@@ -72,6 +71,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         skilllevel = intent.getIntExtra("skill level",0);
         perfectMaze =!intent.getBooleanExtra("rooms",true);
         checkAlgorithm= intent.getStringExtra("generation algorithm");
+        seed = intent.getIntExtra("seed",0);
 
 
         if (checkAlgorithm.equals("DFS")){
@@ -84,8 +84,6 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         else if (checkAlgorithm.equals("Boruvka")){
             builder= Builder.Boruvka;
         }
-        random = new SingleRandom();
-        seed = random.nextInt();
 
         buildMaze();
 
