@@ -72,8 +72,8 @@ public class StatePlaying implements State {
      */
     private MazePanel panel;
 
-    PlayAnimationActivity playAnimation;
-    PlayManuallyActivity playManual;
+    PlayAnimationActivity playAnimation=null;
+    PlayManuallyActivity playManual=null;
 
 
 
@@ -94,7 +94,7 @@ public class StatePlaying implements State {
   
     Floorplan seenCells; // a matrix with cells to memorize which cells are visible from the current point of view
     // the FirstPersonView obtains this information and the Map uses it for highlighting currently visible walls on the map
-    
+
     // debug stuff
     //private boolean deepdebug = false;
     //private boolean allVisible = false;
@@ -149,6 +149,13 @@ public class StatePlaying implements State {
     public void setPlayManualActivity(PlayManuallyActivity playManual){
         this.playManual=playManual;
     }
+    /**
+     * Provides the Activity
+     * @param playAnimation a n obj
+     */
+    public void setPlayAnimationActivity(PlayAnimationActivity playAnimation){
+        this.playAnimation=playAnimation;
+    }
 //    public void setMazePanel(MazePanel panel){
 //        this.panel=panel;
 //    }
@@ -189,7 +196,7 @@ public class StatePlaying implements State {
         	// else: dry-run without graphics, most likely for testing purposes
         	printWarning();
         }
-        
+
 //        if (control.driver!=null) {
 //        	addSensor(Direction.FORWARD,control.forward);
 //        	startThread(control.forward);
@@ -256,8 +263,7 @@ public class StatePlaying implements State {
 //		case BACKWARD:{
 //			sensor.setSensorDirection(Direction.BACKWARD);
 //    		control.robot.addDistanceSensor(sensor, Direction.BACKWARD);
-//    		break;
-//		}
+//    		break;	}
 //		case LEFT:{
 //			sensor.setSensorDirection(Direction.LEFT);
 //    		control.robot.addDistanceSensor(sensor, Direction.LEFT);
@@ -328,7 +334,12 @@ public class StatePlaying implements State {
             walk(1);
             // check termination, did we leave the maze?
             if (isOutside(px,py)) {
-                playManual.playingToWinning();
+                if (playManual!= null){
+                    playManual.playingToWinning();
+                }
+               else if (playAnimation !=null){
+                   playAnimation.playingToWinning();
+                }
             	// TODO: provide actual path length
 //                switchFromPlayingToWinning(0);
             }

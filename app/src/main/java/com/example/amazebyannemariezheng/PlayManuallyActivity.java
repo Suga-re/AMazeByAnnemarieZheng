@@ -69,6 +69,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
         myStatePlaying= new StatePlaying();
         myStatePlaying.setMaze(maze);
+        myStatePlaying.playManual=this;
 
         myStatePlaying.setPlayManualActivity(this);
         myStatePlaying.start(panel);
@@ -167,7 +168,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
     public void playingToWinning(){
         Intent intent = new Intent(PlayManuallyActivity.this, WinningActivity.class);
         intent.putExtra("path length", pathLength);
-        MazeHolder.getInstance().setMaze(maze);
+//        MazeHolder.getInstance().setMaze(maze);
         startActivity(intent);
     }
 

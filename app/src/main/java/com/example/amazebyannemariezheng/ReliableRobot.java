@@ -64,13 +64,15 @@ public class ReliableRobot implements Robot {
 		this.maze = control.getMaze();
 	}
 
-	public void setSensors(StatePlaying control){
+//	public void setSensors(StatePlaying control){
+//
+//		backwardSensor.setMaze(control.getMaze());
+//		forwardSensor.setMaze(control.getMaze());
+//		leftSensor.setMaze(control.getMaze());
+//		rightSensor.setMaze(control.getMaze());
+//	}
 
-		backwardSensor.setMaze(control.getMaze());
-		forwardSensor.setMaze(control.getMaze());
-		leftSensor.setMaze(control.getMaze());
-		rightSensor.setMaze(control.getMaze());
-	}
+
 	
 	@Override
 	public void addDistanceSensor(DistanceSensor sensor, Direction mountedDirection) {

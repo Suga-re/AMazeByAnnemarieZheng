@@ -181,10 +181,10 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     }
 
     private void transferValues(Intent intent){
-        intent.putExtra("generation algorithm", getBuilder());
-        intent.putExtra("skill level", getSkillLevel());
-        intent.putExtra("rooms", isPerfect());
-        intent.putExtra("seed", getSeed());
+//        intent.putExtra("generation algorithm", getBuilder());
+//        intent.putExtra("skill level", getSkillLevel());
+//        intent.putExtra("rooms", isPerfect());
+//        intent.putExtra("seed", getSeed());
         intent.putExtra("driver", driverSelected);
         intent.putExtra("robot", robotSelected);
     }

@@ -19,41 +19,8 @@ public class UnreliableRobot extends ReliableRobot{
 	public void setConfig(String robotConfig){
 		this.robotConfig=robotConfig;
 	}
-	@Override
-	public void setSensors(StatePlaying control){
-		if(robotConfig.equals("Premium")){
-			leftSensor= new ReliableSensor();
-			rightSensor= new ReliableSensor();
-			forwardSensor= new ReliableSensor();
-			backwardSensor= new ReliableSensor();
 
-		}
-		else if (robotConfig.equals("Mediocre")){
-			leftSensor= new UnreliableSensor();
-			rightSensor= new UnreliableSensor();
-			forwardSensor= new ReliableSensor();
-			backwardSensor= new ReliableSensor();
 
-		}
-		else if (robotConfig.equals("So-So")){
-			leftSensor= new ReliableSensor();
-			rightSensor= new ReliableSensor();
-			forwardSensor= new UnreliableSensor();
-			backwardSensor= new UnreliableSensor();
-
-		}
-		else if (robotConfig.equals("Shaky")){
-			leftSensor= new UnreliableSensor();
-			rightSensor= new UnreliableSensor();
-			forwardSensor= new UnreliableSensor();
-			backwardSensor= new UnreliableSensor();
-
-		}
-		backwardSensor.setMaze(control.getMaze());
-		forwardSensor.setMaze(control.getMaze());
-		leftSensor.setMaze(control.getMaze());
-		rightSensor.setMaze(control.getMaze());
-	}
 
 	@Override
 	public int distanceToObstacle(Direction direction) throws UnsupportedOperationException {
