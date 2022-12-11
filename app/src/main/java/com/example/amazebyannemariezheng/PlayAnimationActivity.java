@@ -9,10 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import generation.Distance;
 import generation.Maze;
 
 public class PlayAnimationActivity extends AppCompatActivity {
@@ -29,22 +32,31 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private Button zoomOut;
     private Button pause;
     private SeekBar speed;
+    private ProgressBar energy;
+    private TextView energyText;
 
+    private RadioButton front;
+    private RadioButton back;
+    private RadioButton left;
+    private RadioButton right;
+
+    //for RObot and drivers
     Maze maze;
     Intent intent;
     private UnreliableRobot robot;
     private String robotStr;
     private RobotDriver driver;
     private String driverStr;
-
-    private int mInterval = 5000; // 5 seconds by default, can be changed later
-    private Handler mHandler;
-    private boolean started=false;
-
     DistanceSensor leftSensor;
     DistanceSensor rightSensor;
     DistanceSensor forwardSensor;
     DistanceSensor backwardSensor;
+
+    //for repeating task
+    private int mInterval = 5000; // 5 seconds by default, can be changed later
+    private Handler mHandler;
+    private boolean started=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,23 +65,38 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
         // initiate values for variables
 
+        //set maze
         maze = MazeHolder.getInstance().getMaze();
         mazePanel=(MazePanel) findViewById(R.id.mazePanelAnimation);
+
 
         myStatePlaying= new StatePlaying();
         myStatePlaying.setMaze(maze);
         myStatePlaying.playAnimation=this;
 
+        //set buttons and toggles
         zoomIn =(Button)findViewById(R.id.btnZoomInAnimation);
         zoomOut=(Button)findViewById(R.id.btnZoomOutAnimation);
         pause=(Button)findViewById(R.id.btnPause);
+        win=(Button) findViewById(R.id.btnWin);
+        lose=(Button) findViewById(R.id.btnLose);
+
+        right=(RadioButton) findViewById(R.id.rbRightSensor);
+        left=(RadioButton) findViewById(R.id.rbLeftSensor);
+        front=(RadioButton) findViewById(R.id.rbFrontSensor);
+        back=(RadioButton) findViewById(R.id.rbBackSensor);
+
 
         toggleWalls=(Switch) findViewById(R.id.switchWallsAnimation); //the 2d walls ontop view
         toggleMap=(Switch) findViewById(R.id.switchMapAnimation);
         toggleSolution=(Switch) findViewById(R.id.switchSolutionAnimation);
 
+        speed=(SeekBar) findViewById(R.id.seekBarSpeed);
+        energy=(ProgressBar) findViewById(R.id.progressBarEnergyLeft);
+        energyText=(TextView) findViewById(R.id.tvEnergyLeftAnimation);
 
 
+//ser robot
         intent=getIntent();
         robot= new UnreliableRobot();
         robot.control = myStatePlaying;
@@ -82,6 +109,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         robot.addDistanceSensor(forwardSensor, Robot.Direction.FORWARD);
         robot.addDistanceSensor(backwardSensor, Robot.Direction.BACKWARD);
 
+        checkSensorStatuses(robot);
 
         robot.setBatteryLevel(3500);
 
@@ -91,8 +119,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         driver.setRobot(robot);
 
 
-        win=(Button) findViewById(R.id.btnWin);
-        lose=(Button) findViewById(R.id.btnLose);
+
 
        robot.control.setPlayAnimationActivity(this);
        robot.control.start(mazePanel);
@@ -109,6 +136,22 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
 //set listners etc.
 
+        speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                mInterval=1000/(i+1);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,8 +247,13 @@ public class PlayAnimationActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
+                checkSensorStatuses(robot);
                 boolean atExit=driver.drive1Step2Exit();
                 mazePanel.commit();
+
+
+                energy.setProgress((int) robot.getBatteryLevel());
+                energyText.setText("Energy:"+ Integer.toString((int) robot.getBatteryLevel()));
 
                 if(robot.isAtExit()){
                     if (robot.canSeeThroughTheExitIntoEternity(Robot.Direction.LEFT)==true) {
@@ -220,10 +268,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
                     robot.move(1);
                 }
             } catch (Exception e) {
-                playingToLosing();
+//                playingToLosing();
             }
 //            Toast.makeText(PlayAnimationActivity.this, "testing repeated activity",Toast.LENGTH_SHORT).show();
-            mHandler.postDelayed(this, 500);
+            mHandler.postDelayed(this, mInterval);
         }
     };
 
@@ -233,24 +281,41 @@ public class PlayAnimationActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void playingToLosing(){
+        stopRepeatingTask();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(PlayAnimationActivity.this, LosingActivity.class);
         intent.putExtra("path length", driver.getPathLength());
-        stopRepeatingTask();
         startActivity(intent);
     }
 
     void startRepeatingTask() {
-        started=true;
         automaticPlayer.run();
 //       mHandler.postDelayed(automaticPlayer, 3000);
     }
 
     void stopRepeatingTask() {
-        started=false;
         mHandler.removeCallbacks(automaticPlayer);
     }
 
+    private void check1SensorStatus(DistanceSensor sensor, RadioButton button){
+        if (sensor instanceof UnreliableSensor){
+            button.setChecked(((UnreliableSensor)sensor).isSensorOperational());
+        }
+        else{
+            button.setChecked(true);
+        }
+    }
+    private void checkSensorStatuses(UnreliableRobot robot){
+        check1SensorStatus(robot.getSensor(Robot.Direction.FORWARD), front);
+        check1SensorStatus(robot.getSensor(Robot.Direction.BACKWARD), back);
+        check1SensorStatus(robot.getSensor(Robot.Direction.LEFT), left);
+        check1SensorStatus(robot.getSensor(Robot.Direction.RIGHT), right);
 
+    }
     public void setSensors(StatePlaying control){
         if(robotStr.equals("Premium")){
             leftSensor= new ReliableSensor();
@@ -286,9 +351,21 @@ public class PlayAnimationActivity extends AppCompatActivity {
         rightSensor.setMaze(control.getMaze());
 
         backwardSensor.setSensorDirection(Robot.Direction.BACKWARD);
+//        startRepairProcessSensor(backwardSensor);
         forwardSensor.setSensorDirection(Robot.Direction.FORWARD);
+//        startRepairProcessSensor(forwardSensor);
         leftSensor.setSensorDirection(Robot.Direction.LEFT);
+//        startRepairProcessSensor(leftSensor);
         rightSensor.setSensorDirection(Robot.Direction.RIGHT);
+//        startRepairProcessSensor(rightSensor);
 
+    }
+    private void startRepairProcessSensor(DistanceSensor sensor){
+        sensor.startFailureAndRepairProcess(0,0);
+        try {
+            Thread.sleep(1300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
