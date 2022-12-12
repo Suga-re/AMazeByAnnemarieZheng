@@ -96,7 +96,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         energyText=(TextView) findViewById(R.id.tvEnergyLeftAnimation);
 
 
-//ser robot
+//set robot
         intent=getIntent();
         robot= new UnreliableRobot();
         robot.control = myStatePlaying;
@@ -111,7 +111,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
         checkSensorStatuses(robot);
 
-        robot.setBatteryLevel(3500);
+        robot.setBatteryLevel(100);
 
         driverStr=intent.getStringExtra("driver");
         setDriver(driverStr);
@@ -266,12 +266,15 @@ public class PlayAnimationActivity extends AppCompatActivity {
                         robot.rotate(Robot.Turn.AROUND);
                     }
                     robot.move(1);
+
                 }
+                mHandler.postDelayed(this, mInterval);
             } catch (Exception e) {
-//                playingToLosing();
+                playingToLosing();
+
             }
 //            Toast.makeText(PlayAnimationActivity.this, "testing repeated activity",Toast.LENGTH_SHORT).show();
-            mHandler.postDelayed(this, mInterval);
+
         }
     };
 
@@ -282,11 +285,6 @@ public class PlayAnimationActivity extends AppCompatActivity {
     }
     public void playingToLosing(){
         stopRepeatingTask();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Intent intent = new Intent(PlayAnimationActivity.this, LosingActivity.class);
         intent.putExtra("path length", driver.getPathLength());
         startActivity(intent);
