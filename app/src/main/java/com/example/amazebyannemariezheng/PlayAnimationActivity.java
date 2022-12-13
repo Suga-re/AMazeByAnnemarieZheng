@@ -109,9 +109,11 @@ public class PlayAnimationActivity extends AppCompatActivity {
         robot.addDistanceSensor(forwardSensor, Robot.Direction.FORWARD);
         robot.addDistanceSensor(backwardSensor, Robot.Direction.BACKWARD);
 
+        startRepairProcessSensor(robot.backwardSensor);
+        startRepairProcessSensor(robot.forwardSensor);
+        startRepairProcessSensor(robot.leftSensor);
+        startRepairProcessSensor(robot.rightSensor);
         checkSensorStatuses(robot);
-
-        robot.setBatteryLevel(100);
 
         driverStr=intent.getStringExtra("driver");
         setDriver(driverStr);
@@ -349,21 +351,21 @@ public class PlayAnimationActivity extends AppCompatActivity {
         rightSensor.setMaze(control.getMaze());
 
         backwardSensor.setSensorDirection(Robot.Direction.BACKWARD);
-//        startRepairProcessSensor(backwardSensor);
         forwardSensor.setSensorDirection(Robot.Direction.FORWARD);
-//        startRepairProcessSensor(forwardSensor);
         leftSensor.setSensorDirection(Robot.Direction.LEFT);
-//        startRepairProcessSensor(leftSensor);
         rightSensor.setSensorDirection(Robot.Direction.RIGHT);
-//        startRepairProcessSensor(rightSensor);
+
 
     }
     private void startRepairProcessSensor(DistanceSensor sensor){
-        sensor.startFailureAndRepairProcess(0,0);
-        try {
-            Thread.sleep(1300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (sensor instanceof UnreliableSensor){
+            sensor.startFailureAndRepairProcess(0,0);
+            try {
+                Thread.sleep(1300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }
